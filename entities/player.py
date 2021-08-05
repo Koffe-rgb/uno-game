@@ -4,8 +4,6 @@ from entities.card import Card, colors
 from entities.bot import Bot
 import questionary as qs
 
-#TODO: {1} Bots generation
-
 class Player:
   def __init__(self, name : str, hand_size : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> None:
     self.name = name
