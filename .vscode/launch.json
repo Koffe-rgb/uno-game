@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}\\menu.py",
-      "console": "integratedTerminal"
+      "console": "externalTerminal"
     },
     {
       "name": "Python: game.py",
