@@ -1,7 +1,7 @@
 from game import Game
 from entities.piles import DiscardPile, DrawPile
 from entities.card import Card, colors
-from random import randint
+from random import randrange
 from time import sleep
 
 class Bot:
@@ -30,7 +30,7 @@ class Bot:
   
 
   def play_wild(self, wild_card : Card):   
-    selected_color = colors[randint(0, len(colors)-1)]
+    selected_color = colors[randrange(len(colors))]
 
     wild_card.color = selected_color
     wild_card.title = wild_card.create_title()
@@ -97,10 +97,10 @@ class Bot:
       selected_card = self.first_specific_card(active_cards, lambda card: card.color == '')
       
     if selected_card == None:
-      selected_card = active_cards[randint(0, len(active_cards)-1)]
+      selected_card = active_cards[randrange(len(active_cards))]
     
     self.play_card(selected_card)
-     
+    
   
   
   def is_empty(self) -> bool:
@@ -120,11 +120,13 @@ class Bot:
   def draw_cards(self, top_card):
     print(f'{self.name} can\' play any card. {self.name} starts to draw')
     self.game.turn_counts[self] = 0
-    drawn_card = self.draw_pile.draw()
-    drawns = [ drawn_card ]
-
-    while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
-      drawn_card = self.draw_pile.draw()
-      drawns.append(drawn_card)
     
-    self.hand.extend(drawns)
+    if not self.draw_pile.is_empty():
+      drawn_card = self.draw_pile.draw()
+      drawns = [ drawn_card ]
+
+      while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
+        drawn_card = self.draw_pile.draw()
+        drawns.append(drawn_card)
+      
+      self.hand.extend(drawns)
