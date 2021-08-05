@@ -45,12 +45,15 @@ class DrawPile:
   
 
   def draw(self) -> Card:
+    to_return = self.pile.pop()
+    
     if self.is_empty():
       self.pile.extend(self.discard_pile.pile[:-1])
       self.pile = shuffle_deck(self.pile)
       self.discard_pile.clear()
       qs.print('Draw pile was renewed, discard pile was emptied', 'fg:purple bg:white')
-    return self.pile.pop()
+      
+    return to_return
   
 
   def slice_top(self, size : int) -> list[Card]:
