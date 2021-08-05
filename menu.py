@@ -17,24 +17,23 @@ def start():
 
 
 def setup():
-  op = {}
 
   def set_players(config : ConfigParser):
     n = qs.text('Input number of players: ', validate=NumberValidator).ask()
-    op[NUM_PLAYERS] = n
-    config[SECTION] = op
+    options[NUM_PLAYERS] = n
+    config[SECTION][NUM_PLAYERS] = n
 
 
   def set_bots(config : ConfigParser):
     n = qs.text('Input number of bots: ', validate=NumberValidator).ask()
-    op[NUM_BOTS] = n
-    config[SECTION] = op
+    options[NUM_BOTS] = n
+    config[SECTION][NUM_BOTS] = n
 
 
   def set_hand_size(config : ConfigParser):
     n = qs.text('Input number of bots: ', validate=HandSizeValidator).ask()
-    op[HAND_SIZE] = n
-    config[SECTION] = op
+    options[HAND_SIZE] = n
+    config[SECTION][HAND_SIZE] = n
 
 
   def save_to_file(config : ConfigParser):
@@ -69,9 +68,15 @@ def setup():
     
 
   config = ConfigParser()
-  
-  option = ''
   options = {
+    NUM_PLAYERS : '1',
+    NUM_BOTS : '3',
+    HAND_SIZE : '4'
+  }
+  config[SECTION] = options
+  
+  choice = ''
+  choices = {
     'Set number of players' : set_players,
     'Set number of bots' : set_bots,
     'Set size of hand' : set_hand_size,
@@ -80,14 +85,14 @@ def setup():
     'Close options' : back_to_main
   }
 
-  while option != list(options.keys())[-1]:
-    option = qs.select(
+  while choice != list(choices.keys())[-1]:
+    choice = qs.select(
       'Select an option:',
-      choices=options.keys(),
+      choices=choices.keys(),
       show_selected=True
     ).ask()
 
-    options[option](config)
+    choices[choice](config)
 
 
 def end():

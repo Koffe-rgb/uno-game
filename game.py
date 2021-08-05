@@ -1,4 +1,3 @@
-import configparser
 from entities.piles import DiscardPile, DrawPile
 import questionary as qs
 
