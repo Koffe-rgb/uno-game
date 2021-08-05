@@ -2,7 +2,7 @@ from configparser import ConfigParser
 from entities.piles import DiscardPile, DrawPile
 import questionary as qs
 
-#TODO: боты, правила для первой карты, чистка кода, улучшить UI, ini
+#TODO: правила для первой карты
 
 
 class Game:
