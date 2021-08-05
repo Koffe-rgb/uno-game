@@ -52,7 +52,8 @@ class Player:
   def play_draw(self, num : int) -> None:
     next_player = self.game.get_next_player()
     for _ in range(num):
-      next_player.hand.append(self.draw_pile.draw())
+      if not self.draw_pile.is_empty():
+        next_player.hand.append(self.draw_pile.draw())
 
 
   def play_draw_2(self) -> None:
