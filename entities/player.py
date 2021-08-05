@@ -1,6 +1,7 @@
 from game import Game
 from entities.piles import DiscardPile, DrawPile
 from entities.card import Card, colors
+from entities.bot import Bot
 import questionary as qs
 
 #TODO: {1} Bots generation
@@ -108,21 +109,23 @@ class Player:
 
 
   def draw_cards(self, top_card):
-      qs.select(
-        message='You can\'t play',
-        choices=[ 'Draw a card' ],
-        show_selected=True
-      ).ask()
+    qs.select(
+      message='You can\'t play',
+      choices=[ 'Draw a card' ],
+      show_selected=True
+    ).ask()
+    
+    self.game.turn_counts[self] = 0
 
+    drawn_card = self.draw_pile.draw()
+    drawns = [ drawn_card ]
+
+    while not self.can_play(top_card, [ drawn_card ]):
       drawn_card = self.draw_pile.draw()
-      drawns = [ drawn_card ]
-
-      while not self.can_play(top_card, [ drawn_card ]):
-        drawn_card = self.draw_pile.draw()
-        drawns.append(drawn_card)
-      
-      print(f'You\'ve drawn: ' + ', '.join(str(card) for card in drawns))
-      self.hand.extend(drawns)
+      drawns.append(drawn_card)
+    
+    print(f'You\'ve drawn: ' + ', '.join(str(card) for card in drawns))
+    self.hand.extend(drawns)
 
 
 def generate_players(hand_size : int, player_count : int, bot_count : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> list[Player]:
@@ -130,5 +133,9 @@ def generate_players(hand_size : int, player_count : int, bot_count : int, disca
   for i in range(player_count):
     player = Player(f'Player {i + 1}', hand_size, discard_pile, draw_pile, game)
     players.append(player)
-  # TODO {1}
+  
+  for i in range(bot_count):
+    bot = Bot(f'Bot {i + 1}', hand_size, discard_pile, draw_pile, game)
+    players.append(bot)
+  
   return players

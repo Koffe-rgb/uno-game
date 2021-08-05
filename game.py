@@ -13,7 +13,8 @@ class Game:
     self.discard_pile = DiscardPile()
     self.draw_pile = DrawPile(self.uno_deck, self.discard_pile)
 
-    self.players = generate_players(4, 2, 0, self.discard_pile, self.draw_pile, self)
+    self.players = generate_players(4, 1, 1, self.discard_pile, self.draw_pile, self)
+    self.turn_counts = {}.fromkeys(self.players, -1)
 
     self.turn = 0
     self.direction = 1
@@ -25,6 +26,12 @@ class Game:
     for player in self.players:
       playing = playing and not player.is_empty()
     return playing
+  
+  
+  def update_turn_counts(self) -> None:
+    for k, v in self.turn_counts.items():
+      if v != -1:
+        self.turn_counts[k] += 1
   
 
   def increment_turn(self) -> None:
@@ -48,7 +55,7 @@ class Game:
       cur_player = self.players[self.turn]
       dir = '-->' if self.direction > 0 else '<--'
 
-      qs.print(f'\nCard on top of discard pile: ', 'bold fg:darkorange', end='')
+      qs.print(f'\nCard on top of discard pile: ', 'bold fg:white', end='')
       qs.print(str(top_card), style=top_card.title[0][0])
       print(f'Direction {dir}')
       qs.print(f'{cur_player.name}', 'fg:yellow', end='')
@@ -57,6 +64,7 @@ class Game:
       cur_player.do_turn()
 
       self.increment_turn()
+      self.update_turn_counts()
       playing = self.check_victory_condition()
 
     print('End of the game')
