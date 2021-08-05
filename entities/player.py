@@ -101,10 +101,13 @@ class Player:
   def do_turn(self) -> None:
     top_card = self.discard_pile.top()
 
-    if self.can_play(top_card, self.hand):
-      self.make_choice()
+    if not self.can_play(top_card, self.hand):
+      self.draw_cards(top_card)
+      
+    self.make_choice()
 
-    else:
+
+  def draw_cards(self, top_card):
       qs.select(
         message='You can\'t play',
         choices=[ 'Draw a card' ],
@@ -120,7 +123,6 @@ class Player:
       
       print(f'You\'ve drawn: ' + ', '.join(str(card) for card in drawns))
       self.hand.extend(drawns)
-      self.make_choice()
 
 
 def generate_players(hand_size : int, player_count : int, bot_count : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> list[Player]:
