@@ -126,7 +126,7 @@ class Bot:
       drawn_card = self.draw_pile.draw()
       drawns = [ drawn_card ]
 
-      while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
+      while not self.draw_pile.is_empty() and not self.can_play(top_card, [ drawn_card ]):
         drawn_card = self.draw_pile.draw()
         drawns.append(drawn_card)
       
