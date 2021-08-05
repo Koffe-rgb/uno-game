@@ -115,7 +115,7 @@ class Bot:
       self.draw_cards(top_card)
 
     self.make_choice()
-    # sleep(1)
+    sleep(1)
 
 
   def draw_cards(self, top_card):
