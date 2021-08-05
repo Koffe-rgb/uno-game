@@ -2,6 +2,7 @@ from game import Game
 from entities.piles import DiscardPile, DrawPile
 from entities.card import Card, colors
 from random import randint
+from time import sleep
 
 class Bot:
   def __init__(self, name : str, hand_size : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> None:
@@ -113,6 +114,7 @@ class Bot:
       self.draw_cards(top_card)
 
     self.make_choice()
+    # sleep(1)
 
 
   def draw_cards(self, top_card):
@@ -121,7 +123,7 @@ class Bot:
     drawn_card = self.draw_pile.draw()
     drawns = [ drawn_card ]
 
-    while not self.can_play(top_card, [ drawn_card ]):
+    while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
       drawn_card = self.draw_pile.draw()
       drawns.append(drawn_card)
     

@@ -35,7 +35,8 @@ class Player:
     selected_color = qs.select(
       message='Choose color of wild card',
       choices=colors,
-      show_selected=True
+      show_selected=True,
+      use_shortcuts=False
     ).ask()
 
     wild_card.color = selected_color
@@ -90,7 +91,8 @@ class Player:
       selected_card = qs.select(
         message='Select card to play:',
         choices=self.hand,
-        show_selected=True
+        show_selected=True,
+        use_shortcuts=False
         ).ask()
       correct_choice = self.play_card(selected_card)  
   
@@ -112,7 +114,8 @@ class Player:
     qs.select(
       message='You can\'t play',
       choices=[ 'Draw a card' ],
-      show_selected=True
+      show_selected=True,
+      use_shortcuts=False
     ).ask()
     
     self.game.turn_counts[self] = 0
@@ -120,7 +123,7 @@ class Player:
     drawn_card = self.draw_pile.draw()
     drawns = [ drawn_card ]
 
-    while not self.can_play(top_card, [ drawn_card ]):
+    while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
       drawn_card = self.draw_pile.draw()
       drawns.append(drawn_card)
     
