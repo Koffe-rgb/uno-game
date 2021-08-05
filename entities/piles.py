@@ -1,9 +1,9 @@
 from entities.card import Card, shuffle_deck
+import questionary as qs
 
 class DiscardPile:
   def __init__(self) -> None:
     self.pile = []
-    self.size = 0
   
 
   def __str__(self) -> str:
@@ -11,7 +11,7 @@ class DiscardPile:
   
 
   def is_empty(self) -> bool:
-    return self.size == 0
+    return len(self.pile) == 0
   
 
   def top(self) -> Card:
@@ -22,20 +22,17 @@ class DiscardPile:
 
   def discard(self, card : Card) -> None:
     self.pile.append(card)
-    self.size += 1
   
 
   def clear(self) -> None:
     top_card = self.top()
     self.pile.clear()
     self.discard(top_card)
-    self.size = 1
 
 
 class DrawPile:
   def __init__(self, deck : list[Card], discard_pile : DiscardPile) -> None:
     self.pile = deck
-    self.size = len(deck)
     self.discard_pile = discard_pile
   
 
@@ -44,21 +41,19 @@ class DrawPile:
   
 
   def is_empty(self) -> bool:
-    return self.size == 0
+    return len(self.pile) == 0
   
 
   def draw(self) -> Card:
     if self.is_empty():
-      self.pile.extend(self.discard_pile.pile)
+      self.pile.extend(self.discard_pile.pile[:-1])
       self.pile = shuffle_deck(self.pile)
       self.discard_pile.clear()
-      print('Draw pile was renewed, discard pile was emptied')
-    self.size -= 1
+      qs.print('Draw pile was renewed, discard pile was emptied', 'fg:purple bg:white')
     return self.pile.pop()
   
 
   def slice_top(self, size : int) -> list[Card]:
     to_return = self.pile[:size]
     self.pile = self.pile[size:]
-    self.size -= size
     return to_return
