@@ -12,7 +12,7 @@ class Card(Choice):
     self.color = color
     self.action = action
     title = self.create_title()
-    super().__init__(title, value=self, disabled=None, checked=None, shortcut_key=None)
+    super().__init__(title, value=self, disabled=None, checked=None, shortcut_key=False)
   
 
   def to_string(self) -> str:
