@@ -119,16 +119,16 @@ class Player:
     ).ask()
     
     self.game.turn_counts[self] = 0
-
-    drawn_card = self.draw_pile.draw()
-    drawns = [ drawn_card ]
-
-    while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
+    if not self.draw_pile.is_empty():
       drawn_card = self.draw_pile.draw()
-      drawns.append(drawn_card)
-    
-    print(f'You\'ve drawn: ' + ', '.join(str(card) for card in drawns))
-    self.hand.extend(drawns)
+      drawns = [ drawn_card ]
+
+      while not self.draw_pile.is_empty() or not self.can_play(top_card, [ drawn_card ]):
+        drawn_card = self.draw_pile.draw()
+        drawns.append(drawn_card)
+      
+      print(f'You\'ve drawn: ' + ', '.join(str(card) for card in drawns))
+      self.hand.extend(drawns)
 
 
 def generate_players(hand_size : int, player_count : int, bot_count : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> list[Player]:
