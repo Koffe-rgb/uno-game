@@ -1,3 +1,4 @@
+from configparser import ConfigParser
 from entities.piles import DiscardPile, DrawPile
 import questionary as qs
 
@@ -5,7 +6,7 @@ import questionary as qs
 
 
 class Game:
-  def __init__(self) -> None:
+  def __init__(self, config : ConfigParser) -> None:
     from entities.card import shuffle_deck, generate_deck
     from entities.player import generate_players
 
@@ -13,7 +14,10 @@ class Game:
     self.discard_pile = DiscardPile()
     self.draw_pile = DrawPile(self.uno_deck, self.discard_pile)
 
-    self.players = generate_players(4, 1, 1, self.discard_pile, self.draw_pile, self)
+    hand_size = config['Options'].getint('Hand size')
+    player_num = config['Options'].getint('Number of players')
+    bot_num = config['Options'].getint('Number of bots')
+    self.players = generate_players(hand_size, player_num, bot_num, self.discard_pile, self.draw_pile, self)
     self.turn_counts = {}.fromkeys(self.players, -1)
 
     self.turn = 0
@@ -66,6 +70,8 @@ class Game:
       self.increment_turn()
       self.update_turn_counts()
       playing = self.check_victory_condition()
+      if not playing:
+        qs.print(f'{cur_player.name} has won!', style='bold fg:red')
 
     print('End of the game')
 

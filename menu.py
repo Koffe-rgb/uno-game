@@ -11,28 +11,25 @@ NUM_BOTS = 'Number of bots'
 HAND_SIZE = 'Hand size'
 
 
-def start():
-  game = Game()
+def start(config : ConfigParser):
+  game = Game(config)
   game.start_game()
 
 
-def setup():
+def setup(config : ConfigParser):
 
   def set_players(config : ConfigParser):
     n = qs.text('Input number of players: ', validate=NumberValidator).ask()
-    options[NUM_PLAYERS] = n
     config[SECTION][NUM_PLAYERS] = n
 
 
   def set_bots(config : ConfigParser):
     n = qs.text('Input number of bots: ', validate=NumberValidator).ask()
-    options[NUM_BOTS] = n
     config[SECTION][NUM_BOTS] = n
 
 
   def set_hand_size(config : ConfigParser):
     n = qs.text('Input number of bots: ', validate=HandSizeValidator).ask()
-    options[HAND_SIZE] = n
     config[SECTION][HAND_SIZE] = n
 
 
@@ -66,15 +63,6 @@ def setup():
   def back_to_main(config : ConfigParser):
     return 'ExIt FrOm ThE mEnU'
     
-
-  config = ConfigParser()
-  options = {
-    NUM_PLAYERS : '1',
-    NUM_BOTS : '3',
-    HAND_SIZE : '4'
-  }
-  config[SECTION] = options
-  
   choice = ''
   choices = {
     'Set number of players' : set_players,
@@ -100,7 +88,15 @@ def end():
 
 
 def main():
+  config = ConfigParser()
   options = {
+    NUM_PLAYERS : '1',
+    NUM_BOTS : '3',
+    HAND_SIZE : '4'
+  }
+  config[SECTION] = options
+  
+  choices = {
     'Start the game' : start,
     'Setup the game' : setup,
     'Quit' : end
@@ -109,13 +105,16 @@ def main():
   qs.print('  Welcome to the game UNO  ', 'bold fg:blue bg:white')
 
   while True:
-    option = qs.select(
+    choice = qs.select(
       message='Choose the option:',
-      choices=options.keys(),
+      choices=choices.keys(),
       show_selected=True
     ).ask()
-
-    options[option]()
+    
+    if choice == list(choices.keys())[-1]:
+      choices[choice]()
+    else:
+      choices[choice](config)
 
 
 if __name__ == '__main__':
