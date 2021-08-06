@@ -73,5 +73,4 @@ class Game:
       if not playing:
         qs.print(f'{cur_player.name} победил!', style='bold fg:red')
 
-    print('Конец игры')
     input('Конец игры. Нажмите Enter')
