@@ -3,6 +3,7 @@ from entities.piles import DiscardPile, DrawPile
 from entities.card import Card, colors_ru_en
 from random import randrange
 from time import sleep
+import questionary as qs
 
 class Bot:
   def __init__(self, name : str, hand_size : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> None:
@@ -120,7 +121,7 @@ class Bot:
 
 
   def draw_cards(self, top_card):
-    print(f'{self.name} не может играть. {self.name} начинает тянуть карты из стопки добора')
+    qs.print(f'{self.name} не может играть. {self.name} начинает тянуть карты из стопки добора')
     self.game.turn_counts[self] = 0
     
     if not self.draw_pile.is_empty():

@@ -133,7 +133,7 @@ class Player:
         drawn_card = self.draw_pile.draw()
         drawns.append(drawn_card)
       
-      print(f'Вы вытянули следующие карты: ' + ', '.join(str(card) for card in drawns))
+      qs.print(f'Вы вытянули следующие карты: ' + ', '.join(str(card) for card in drawns))
       self.hand.extend(drawns)
 
 

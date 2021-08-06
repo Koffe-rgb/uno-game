@@ -110,7 +110,6 @@ def main():
   qs.print('  Добро пожаловать в УНО  ', 'bold fg:blue bg:white')
 
   while True:
-    os.system('cls')
     choice = qs.select(
       message='Выберите опцию:',
       choices=choices.keys(),

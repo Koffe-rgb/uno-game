@@ -61,9 +61,11 @@ class Game:
 
       qs.print(f'Последняя карта в стопке сброса:', 'bold fg:purple bg:white', end='')
       qs.print(' ' + str(top_card), style=top_card.title[0][0])
-      print(f'Направление хода игры {dir}\n')
-      print('Сейчас ходит ', end='')
-      qs.print(f'{cur_player.name}', 'fg:purple')
+      
+      qs.print(f'Направление хода игры {dir}\n')
+      
+      qs.print('Сейчас ходит ', end='')
+      qs.print(f'{cur_player.name}', 'fg:purple', end='\n')
       
       cur_player.do_turn()
 
