@@ -59,11 +59,11 @@ class Game:
       cur_player = self.players[self.turn]
       dir = '-->' if self.direction > 0 else '<--'
 
-      qs.print(f'\nCard on top of discard pile: ', 'bold fg:white', end='')
-      qs.print(str(top_card), style=top_card.title[0][0])
-      print(f'Direction {dir}')
-      qs.print(f'{cur_player.name}', 'fg:yellow', end='')
-      print('\'s turn')
+      qs.print(f'Последняя карта в стопке сброса:', 'bold fg:purple bg:white', end='')
+      qs.print(' ' + str(top_card), style=top_card.title[0][0])
+      print(f'Направление хода игры {dir}\n')
+      print('Сейчас ходит ', end='')
+      qs.print(f'{cur_player.name}', 'fg:purple')
       
       cur_player.do_turn()
 
@@ -71,6 +71,7 @@ class Game:
       self.update_turn_counts()
       playing = self.check_victory_condition()
       if not playing:
-        qs.print(f'{cur_player.name} has won!', style='bold fg:red')
+        qs.print(f'{cur_player.name} победил!', style='bold fg:red')
 
-    print('End of the game')
+    print('Конец игры')
+    input('Конец игры. Нажмите Enter')

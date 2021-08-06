@@ -1,9 +1,11 @@
 from configparser import ConfigParser
-from validators import HandSizeValidator, NumberValidator
+from validators import HandSizeValidator, PlayerNumberValidator, BotNumberValidator
 from prompt_toolkit.shortcuts import CompleteStyle
 from game import Game
 import sys
+import os
 import questionary as qs
+
 
 SECTION = 'Options'
 NUM_PLAYERS = 'Number of players'
@@ -19,45 +21,46 @@ def start(config : ConfigParser):
 def setup(config : ConfigParser):
 
   def set_players(config : ConfigParser):
-    n = qs.text('Input number of players: ', validate=NumberValidator).ask()
+    n = qs.text('Введите количество игроков: ', validate=PlayerNumberValidator).ask()
     config[SECTION][NUM_PLAYERS] = n
+    
 
 
   def set_bots(config : ConfigParser):
-    n = qs.text('Input number of bots: ', validate=NumberValidator).ask()
+    n = qs.text('Введите количество ботов: ', validate=BotNumberValidator).ask()
     config[SECTION][NUM_BOTS] = n
 
 
   def set_hand_size(config : ConfigParser):
-    n = qs.text('Input number of bots: ', validate=HandSizeValidator).ask()
+    n = qs.text('Введите количество карт в руке в начале игры: ', validate=HandSizeValidator).ask()
     config[SECTION][HAND_SIZE] = n
 
 
   def save_to_file(config : ConfigParser):
     path = qs.path(
-      'Input path to save your preferences: ', 
+      'Введите путь и название файла для сохранения настроек: ', 
       complete_style=CompleteStyle.COLUMN
       ).ask()
     try:
       with open(path, 'w+') as configfile:
         config.write(configfile)
     except FileExistsError:
-      qs.print('Error occured, file with this name already exists', 'fg:red')
+      qs.print('Произошла ошибка, файл с таким именем уже существует', 'fg:red')
     except:
-      qs.print('Error occured, couldn\'t save file', 'fg:red')
+      qs.print('Произошла ошибка, не удалось сохранить файл', 'fg:red')
 
 
   def load_from_file(config : ConfigParser):
     path = qs.path(
-      'Input path to file of your preferences: ', 
+      'Введите путь до файла настроек, чтобы загрузить настройки: ', 
       complete_style=CompleteStyle.COLUMN
       ).ask()
     try:
       config.read(path)
     except FileNotFoundError:
-      qs.print('Error ocurred, file not found', 'fg:red')
+      qs.print('Произошла ошибка, файл с таким именем не найден', 'fg:red')
     except:
-      qs.print('Error occured, couldn\'t read file', 'fg:red')
+      qs.print('Произошла ошибка, не удалось прочесть файл', 'fg:red')
 
 
   def back_to_main(config : ConfigParser):
@@ -65,19 +68,21 @@ def setup(config : ConfigParser):
     
   choice = ''
   choices = {
-    'Set number of players' : set_players,
-    'Set number of bots' : set_bots,
-    'Set size of hand' : set_hand_size,
-    'Save preferences to file' : save_to_file,
-    'Load preferences from file' : load_from_file,
-    'Close options' : back_to_main
+    'Установить количество игроков' : set_players,
+    'Установить количество ботов' : set_bots,
+    'Установить количество карт в руке' : set_hand_size,
+    'Сохранить настройки' : save_to_file,
+    'Загрузить настройки' : load_from_file,
+    'Закрыть это окно' : back_to_main
   }
 
+  
   while choice != list(choices.keys())[-1]:
+    os.system('cls')
     choice = qs.select(
-      'Select an option:',
+      'Выберите опцию:',
       choices=choices.keys(),
-      show_selected=True
+      instruction='(Используйте стрелки)'
     ).ask()
 
     choices[choice](config)
@@ -97,18 +102,19 @@ def main():
   config[SECTION] = options
   
   choices = {
-    'Start the game' : start,
-    'Setup the game' : setup,
-    'Quit' : end
+    'Начать игру' : start,
+    'Настроить игру' : setup,
+    'Выйти' : end
   }
 
-  qs.print('  Welcome to the game UNO  ', 'bold fg:blue bg:white')
+  qs.print('  Добро пожаловать в УНО  ', 'bold fg:blue bg:white')
 
   while True:
+    os.system('cls')
     choice = qs.select(
-      message='Choose the option:',
+      message='Выберите опцию:',
       choices=choices.keys(),
-      show_selected=True
+      instruction='(Используйте стрелки)'
     ).ask()
     
     if choice == list(choices.keys())[-1]:

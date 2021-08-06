@@ -51,7 +51,7 @@ class DrawPile:
       self.pile.extend(self.discard_pile.pile[:-1])
       self.pile = shuffle_deck(self.pile)
       self.discard_pile.clear()
-      qs.print('Draw pile was renewed, discard pile was emptied', 'fg:purple bg:white')
+      qs.print('Стопка добора была обновлена', 'fg:purple bg:white')
       
     return to_return
   

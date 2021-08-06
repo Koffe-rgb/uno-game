@@ -1,11 +1,15 @@
 from questionary import Choice
 from random import randint
 
+actions = ['Пропусти ход', 'Наоборот', 'Возьми 2']
+wild_actions = ['Закажи цвет', 'Закажи цвет и возьми 4']
 
-colors = ['Red', 'Blue', 'Yellow', 'Green']
-actions = ['Skip', 'Reverse', 'Draw 2']
-wild_actions = ['Wild', 'Wild Draw 4']
-
+colors_ru_en = {
+  'Красная карта' : 'red',
+  'Синяя карта' : 'blue',
+  'Желтая карта' : 'yellow',
+  'Зеленая карта' : 'green'
+}
 
 class Card(Choice):
   def __init__(self, color : str, action : str) -> None:
@@ -21,7 +25,7 @@ class Card(Choice):
 
   def create_title(self):
     return [(
-      f'fg:{self.color}' if self.color != '' else 'fg:white', 
+      f'fg:{colors_ru_en[self.color]}' if self.color != '' else 'fg:white', 
       f'{self.color} {self.action}'.strip() if self.color != '' else self.action
       )]
   
@@ -37,7 +41,7 @@ class Card(Choice):
 def generate_deck() -> list[Card]:
   deck = []
   
-  for color in colors:
+  for color in colors_ru_en.keys():
     for action in wild_actions:
       deck.append(Card('', action))
 

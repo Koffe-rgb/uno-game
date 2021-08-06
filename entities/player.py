@@ -1,8 +1,12 @@
 from game import Game
 from entities.piles import DiscardPile, DrawPile
-from entities.card import Card, colors
+from entities.card import Card, colors_ru_en
 from entities.bot import Bot
 import questionary as qs
+
+white_answer_style = qs.Style([
+  ('answer', 'fg:white')
+])
 
 class Player:
   def __init__(self, name : str, hand_size : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> None:
@@ -13,10 +17,10 @@ class Player:
     self.game = game
 
     self.actions = {
-      'Skip' : self.play_skip,
-      'Reverse' : self.play_reverse,
-      'Draw 2' : self.play_draw_2,
-      'Wild Draw 4' : self.play_draw_4,
+      'Пропусти ход' : self.play_skip,
+      'Наоборот' : self.play_reverse,
+      'Возьми 2' : self.play_draw_2,
+      'Закажи цвет и возьми 4' : self.play_draw_4,
     }
   
 
@@ -31,10 +35,11 @@ class Player:
 
   def play_wild(self, wild_card : Card):
     selected_color = qs.select(
-      message='Choose color of wild card',
-      choices=colors,
-      show_selected=True,
-      use_shortcuts=False
+      message='Заказывайте цвет',
+      choices=colors_ru_en.keys(),
+      use_shortcuts=False,
+      instruction='(Используйте стрелки)',
+      style=white_answer_style
     ).ask()
 
     wild_card.color = selected_color
@@ -80,7 +85,7 @@ class Player:
       return True
 
     else:
-      qs.print('Invalid card. Please select other card', 'fg:red')
+      qs.print('Неподходящая карта. Пожалуйста, выберите другую карту', 'fg:red')
       return False
   
 
@@ -88,10 +93,11 @@ class Player:
     correct_choice = False
     while not correct_choice:
       selected_card = qs.select(
-        message='Select card to play:',
+        message='Выберите карту для сброса:',
         choices=self.hand,
-        show_selected=True,
-        use_shortcuts=False
+        use_shortcuts=False,
+        instruction='(Используйте стрелки)',
+        style=white_answer_style
         ).ask()
       correct_choice = self.play_card(selected_card)  
   
@@ -111,10 +117,11 @@ class Player:
 
   def draw_cards(self, top_card):
     qs.select(
-      message='You can\'t play',
-      choices=[ 'Draw a card' ],
-      show_selected=True,
-      use_shortcuts=False
+      message='У вас нет подходящих карт',
+      choices=[ 'Тянуть карты' ],
+      use_shortcuts=False,
+      instruction='(Используйте стрелки)',
+      style=white_answer_style
     ).ask()
     
     self.game.turn_counts[self] = 0
@@ -126,18 +133,18 @@ class Player:
         drawn_card = self.draw_pile.draw()
         drawns.append(drawn_card)
       
-      print(f'You\'ve drawn: ' + ', '.join(str(card) for card in drawns))
+      print(f'Вы вытянули следующие карты: ' + ', '.join(str(card) for card in drawns))
       self.hand.extend(drawns)
 
 
 def generate_players(hand_size : int, player_count : int, bot_count : int, discard_pile : DiscardPile, draw_pile : DrawPile, game : Game) -> list[Player]:
   players = []
   for i in range(player_count):
-    player = Player(f'Player {i + 1}', hand_size, discard_pile, draw_pile, game)
+    player = Player(f'Игрок {i + 1}', hand_size, discard_pile, draw_pile, game)
     players.append(player)
   
   for i in range(bot_count):
-    bot = Bot(f'Bot {i + 1}', hand_size, discard_pile, draw_pile, game)
+    bot = Bot(f'Бот {i + 1}', hand_size, discard_pile, draw_pile, game)
     players.append(bot)
   
   return players

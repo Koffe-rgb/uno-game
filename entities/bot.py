@@ -1,6 +1,6 @@
 from game import Game
 from entities.piles import DiscardPile, DrawPile
-from entities.card import Card, colors
+from entities.card import Card, colors_ru_en
 from random import randrange
 from time import sleep
 
@@ -13,10 +13,10 @@ class Bot:
     self.game = game
 
     self.actions = {
-      'Skip' : self.play_skip,
-      'Reverse' : self.play_reverse,
-      'Draw 2' : self.play_draw_2,
-      'Wild Draw 4' : self.play_draw_4,
+      'Пропусти ход' : self.play_skip,
+      'Наоборот' : self.play_reverse,
+      'Возьми 2' : self.play_draw_2,
+      'Закажи цвет и возьми 4' : self.play_draw_4,
     }
   
 
@@ -30,6 +30,7 @@ class Bot:
   
 
   def play_wild(self, wild_card : Card):   
+    colors = list(colors_ru_en.keys())
     selected_color = colors[randrange(len(colors))]
 
     wild_card.color = selected_color
@@ -90,9 +91,9 @@ class Bot:
     
     # if next player about to win, try to add to his hand more cards or reverse direction of game or skip them
     if len(next_player.hand) < 2:
-      selected_card = self.first_specific_card(active_cards, lambda card: card.action.startswith('Draw') 
-                                               or card.action == 'Reverse' 
-                                               or card.action == 'Skip')
+      selected_card = self.first_specific_card(active_cards, lambda card: card.action.startswith('Возьми') 
+                                               or card.action == 'Наоборот' 
+                                               or card.action == 'Пропусти ход')
     # needs condition for wild cards. perfect solution - when next player drawn cards last their turn 
     elif 0 <= self.game.turn_counts[next_player] <= 2:
       selected_card = self.first_specific_card(active_cards, lambda card: card.color == '')
@@ -119,7 +120,7 @@ class Bot:
 
 
   def draw_cards(self, top_card):
-    print(f'{self.name} can\' play any card. {self.name} starts to draw')
+    print(f'{self.name} не может играть. {self.name} начинает тянуть карты из стопки добора')
     self.game.turn_counts[self] = 0
     
     if not self.draw_pile.is_empty():
