@@ -74,7 +74,3 @@ class Game:
         qs.print(f'{cur_player.name} has won!', style='bold fg:red')
 
     print('End of the game')
-
-if __name__ == '__main__':
-  game = Game()
-  game.start_game()
